@@ -210,11 +210,11 @@ Requires 1.9, should be easy to backport to 1.8 if anyone is interested. Use
 1.9 style hashes and probably relies on `methods` calls returning symbols
 rather than strings.
 
-## Support
+### Support
 
 Make a [new github issue](https://github.com/xaviershay/poniard/issues/new).
 
-## Contributing
+### Contributing
 
 Fork and patch! Please update the README and other documentation if you add
 features.
