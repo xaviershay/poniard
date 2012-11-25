@@ -4,27 +4,39 @@ module Poniard
   class Injector
     attr_reader :sources
 
-    def initialize(sources)
-      @sources = sources + [self]
+    def initialize(sources = [])
+      @sources = sources.map {|source|
+        if source.is_a? Hash
+          OpenStruct.new(source)
+        else
+          source
+        end
+      }+ [self]
     end
 
     def dispatch(method, overrides = {})
       args = method.parameters.map {|_, name|
-        source = (
-          [OpenStruct.new(overrides)] +
-          sources
-        ).detect {|source| source.respond_to?(name) }
+        source = sources_for(overrides).detect {|source|
+          source.respond_to?(name)
+        }
+
         if source
           dispatch(source.method(name), overrides)
         else
           UnknownInjectable.new(name)
         end
       }
-      method.call(*args)
+      method.(*args)
     end
 
     def injector
       self
+    end
+
+    private
+
+    def sources_for(overrides)
+      [OpenStruct.new(overrides)] + sources
     end
   end
 
