@@ -37,7 +37,7 @@ module Poniard
         controller.render *args
       end
 
-      def default(ivars)
+      def default(ivars = {})
         ivars.each do |name, val|
           controller.instance_variable_set("@#{name}", val)
         end
