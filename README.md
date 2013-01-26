@@ -115,9 +115,9 @@ require 'controller/registration'
 
 describe Controller::Registration do
   let(:response) { double("Poniard::ControllerSource") }
-  let(:injector) { Poniard::Injector.new([OpenStruct.new(
+  let(:injector) { Poniard::Injector.new([
     response: response.as_null_object
-  )]) }
+  ]) }
 
   def dispatch(action, overrides = {})
     injector.dispatch described_class.new.method(action), overrides
