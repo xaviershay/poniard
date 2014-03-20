@@ -1,5 +1,9 @@
 # Poniard History
 
+## 0.0.3 - 19 March 2014
+
+* Support `head` responses.
+
 ## 0.0.2 - 26 January 2013
 
 * Hashes can be used directly as sources.
@@ -8,3 +12,4 @@
 ## 0.0.1 - 25 November 2012
 
 * Initial release.
+
