@@ -17,6 +17,10 @@ module Poniard
         render action: action, ivars: ivars
       end
 
+      def head(*args)
+        controller.head *args
+      end
+
       def render(*args)
         opts = args.last
         if opts.is_a?(Hash)
