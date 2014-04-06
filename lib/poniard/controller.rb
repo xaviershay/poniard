@@ -8,7 +8,7 @@ module Poniard
       injector = Injector.new [
         ControllerSource.new(self)
       ] + self.class.sources.map(&:new)
-      injector.dispatch self.class.provided_by.new.method(method)
+      injector.eager_dispatch self.class.provided_by.new.method(method)
     end
 
     module ClassMethods

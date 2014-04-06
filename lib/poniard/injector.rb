@@ -15,6 +15,22 @@ module Poniard
     end
 
     def dispatch(method, overrides = {})
+      dispatch_method(method, UnknownInjectable.method(:new), overrides)
+    end
+
+    def eager_dispatch(method, overrides = {})
+      dispatch_method(method, ->(name) {
+        ::Kernel.raise UnknownParam, name
+      }, overrides)
+    end
+
+    def injector
+      self
+    end
+
+    private
+
+    def dispatch_method(method, unknown_param_f, overrides = {})
       args = method.parameters.map {|_, name|
         source = sources_for(overrides).detect {|source|
           source.respond_to?(name)
@@ -23,17 +39,11 @@ module Poniard
         if source
           dispatch(source.method(name), overrides)
         else
-          UnknownInjectable.new(name)
+          unknown_param_f.(name)
         end
       }
       method.(*args)
     end
-
-    def injector
-      self
-    end
-
-    private
 
     def sources_for(overrides)
       [OpenStruct.new(overrides)] + sources
