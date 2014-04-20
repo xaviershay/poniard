@@ -17,5 +17,5 @@ function check_documentation_coverage {
 }
 
 bundle exec rspec
-bundle exec cane
+bundle exec cane --gte 'coverage/.last_run.json,98'
 check_documentation_coverage
