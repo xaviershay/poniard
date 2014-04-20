@@ -1,5 +1,7 @@
 ENV['RAILS_ENV'] = 'test'
 
+require 'spec_helper'
+
 require 'action_controller/railtie'
 require 'rspec/rails'
 

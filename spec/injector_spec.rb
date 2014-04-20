@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 require 'poniard/injector'
 
 describe Poniard::Injector do
