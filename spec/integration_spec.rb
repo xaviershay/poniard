@@ -174,9 +174,8 @@ describe Poniard::ControllerSource, type: :controller do
       end
 
       it 'handles unknown format' do
-        pending "Unimplemented"
         get :index, format: :json
-        expect(response.status).to eq(422)
+        expect(response.status).to eq(406)
       end
     end
   end

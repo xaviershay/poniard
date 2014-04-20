@@ -106,6 +106,9 @@ module Poniard
       # a method named after each format it supports. The methods are called
       # via the injector.
       #
+      # If the requested format is not implemented, a 406 "Not Acceptable"
+      # response is returned.
+      #
       # @example
       #     class MyController
       #       IndexResponse = Struct.new(:results) do
@@ -127,6 +130,8 @@ module Poniard
         format = controller.request.format.symbol
         if obj.respond_to?(format)
           injector.dispatch obj.method(format)
+        else
+          head(406) # Not acceptable
         end
       end
 
