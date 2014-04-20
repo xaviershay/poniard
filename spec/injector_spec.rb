@@ -82,4 +82,13 @@ describe Poniard::Injector do
     described_class.new.dispatch(m)
     called.should be_true
   end
+
+  describe '#eager_dispatch' do
+    it 'raises when source is unknown' do
+      m = ->(unknown) {}
+      expect {
+        described_class.new.eager_dispatch(m)
+      }.to raise_error(Poniard::UnknownParam, "unknown")
+    end
+  end
 end
