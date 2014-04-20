@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/square/cane.git
+  revision: d34123533f744238086e41b18684d201a2322c42
+  branch: doc-violation-fix
+  specs:
+    cane (2.6.1)
+      parallel
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -27,6 +35,7 @@ GEM
     json (1.8.1)
     minitest (5.3.3)
     multi_json (1.9.2)
+    parallel (1.0.0)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -57,10 +66,13 @@ GEM
     thread_safe (0.3.3)
     tzinfo (1.1.0)
       thread_safe (~> 0.1)
+    yard (0.8.7.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  cane!
   rspec-rails
   simplecov
+  yard
