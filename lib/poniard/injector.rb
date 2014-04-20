@@ -6,9 +6,6 @@ module Poniard
   # can be provided to lookup parameter values. They are checked in reverse
   # order.
   #
-  # For complex dispatches, the injector is available to methods via the
-  # +injector+ parameter.
-  #
   # @example
   #     def my_method(printer)
   #       printer.("hello!")
@@ -27,7 +24,7 @@ module Poniard
         else
           source
         end
-      } + [OpenStruct.new(injector: self)]
+      } + [InjectorSource.new(self)]
     end
 
     # Call the given method with arguments. If a parameter is not provided by
@@ -63,6 +60,20 @@ module Poniard
 
     def sources_for(overrides)
       [OpenStruct.new(overrides)] + sources
+    end
+
+  # Default source that is always available.
+    class InjectorSource
+      # @private
+      def initialize(injector)
+        @injector = injector
+      end
+
+      # The injector itself is available to methods via the +injector+
+      # parameter.
+      def injector
+        @injector
+      end
     end
   end
 
