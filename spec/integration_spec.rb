@@ -274,4 +274,23 @@ describe Poniard::ControllerSource, type: :controller do
       expect(response.body).to eq(PoniardApp.config.secret_token)
     end
   end
+
+  context 'with layout' do
+    render_views
+
+    poniard_controller do
+      def layout
+        'admin'
+      end
+
+      def index(response, app_config)
+        response.render text: "secret", layout: true
+      end
+    end
+
+    it 'uses the provided layout' do
+      get :index
+      expect(response.body).to match(/ADMIN: secret/)
+    end
+  end
 end
