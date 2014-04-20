@@ -24,16 +24,24 @@ module Poniard
       # they are used as is without adding a +_path+ suffix. That is a little
       # magic, justified by +_path+ being what you want 90% of the time.
       #
+      # If +path+ is a string, redirect to it as is without calling any route
+      # helpers.
+      #
       # @example
       #     def index(response)
       #       response.redirect_to :user, 1 # user_path(1)
       #     end
       def redirect_to(path, *args)
-        unless path.to_s.ends_with?('_url')
-          path = "#{path}_path"
-        end
+        case path
+        when Symbol
+          unless path.to_s.ends_with?('_url')
+            path = "#{path}_path"
+          end
 
-        controller.redirect_to(controller.send(path, *args))
+          controller.redirect_to(controller.send(path, *args))
+        else
+          controller.redirect_to path, *args
+        end
       end
 
       # Redirect to the given action on the current controller.

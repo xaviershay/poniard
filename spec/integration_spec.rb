@@ -104,7 +104,6 @@ describe Poniard::ControllerSource, type: :controller do
         end
 
         it 'redirects' do
-          pending "Unimplemented"
           get :index
           expect(response).to redirect_to("/some_path")
         end
