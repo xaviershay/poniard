@@ -1,5 +1,13 @@
 # Poniard History
 
+## 1.0.0 - 20 April 2014
+
+* `respond_with` returns 406 for unknown formats.
+* Remove `OpenStruct` usage and other known cache-busting constructs.
+* `redirect_to` supports redirects to arbitrary locations when passed a string
+  parameter.
+* Complete documentation of public API.
+
 ## 0.0.3 - 19 March 2014
 
 * Support `head` responses.
