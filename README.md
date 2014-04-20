@@ -141,7 +141,7 @@ Techniques
 
 See the [YARD docs][yard] for all the built in controller sources.
 
-[yard]: http://rubydoc.info/github/xaviershay/poniard/
+[yard]: http://rubydoc.info/github/xaviershay/poniard/master/Poniard/ControllerSource/
 
 ### Layouts
 
