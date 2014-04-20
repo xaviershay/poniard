@@ -201,7 +201,8 @@ Developing
 
 ### Status
 
-Not widely used, but stable.
+Not widely used. May be some obvious things missing from built-in controller
+sources that you will have to add.
 
 ### Compatibility
 
