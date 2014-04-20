@@ -204,6 +204,11 @@ Developing
 Not widely used. May be some obvious things missing from built-in controller
 sources that you will have to add.
 
+As far as I know Poniard has not been used on any high traffic applications, and
+I wouldn't be surprised if there is a performance penalty for using it due to
+the use of reflection. Please benchmark (and share!) before using in such an
+environment.
+
 ### Compatibility
 
 Requires 1.9 or above.
