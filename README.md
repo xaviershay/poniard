@@ -3,23 +3,23 @@ Poniard
 
 A lightweight gem that provides an alternative to Rails controllers. It uses
 parameter based dependency injection to explicitly make dependencies available,
-rather than mixing them all in from a base class. This allows you to properly
-unit test your controllers in isolation, bringing all the design benefits of
-TDD (as opposed to "test-first" development which is more common with the
-standard integration style controller tests).
+rather than mixing them all in from a base class. This allows controllers to be
+properly tested in isolation, bringing all the design benefits of TDD (as
+opposed to "test-first" development, which is more common with the standard
+integration style controller tests).
 
-Poniard is designed to be compatible with standard controllers. You can use it
+Poniard is designed to be compatible with standard controllers. It can be used
 for your entire application, just one action, or anything in between.
 
 Example
 -------
 
 A poniard controller is slightly more verbose than the what you may be used to.
-In particular, you need to specify all the different dependencies you wish to
-use (`response` and `finder` in this example) as parameters to your method.
-Poniard will introspect the method before calling, and ensure that the correct
-values are passed. These values will for the most part be the same objects you
-normally deal with in Rails (`session`, `flash`, etc...).
+In particular, all the dependencies of a method (`response` in the following
+example) must be declared as parameters to your method. Poniard will introspect
+the method before calling, and ensure that the correct values are passed. These
+values will for the most part be the same objects you normally deal with in
+Rails (`session`, `flash`, etc...).
 
 The following controller renders the default index template, setting the
 instance variables `@message`.
@@ -34,12 +34,12 @@ module Controller
 end
 ```
 
-This is more explicit than traditional controllers in two ways: passing
-variables to the template is done with an explicit method call rather than
-instance variable assignment, and dependencies that would normally be made
-available by a superclass are passed in as parameters to the method.
+This is differs from traditional controllers in two ways: passing variables to
+the template is done with an explicit method call rather than instance variable
+assignment, and dependencies that would normally be made available by
+a superclass are passed in as parameters to the method.
 
-Wiring this controller into your application is a one-liner in your normal
+Wiring this controller into an application is a one-liner in the normal
 controller definition.
 
 ```ruby
@@ -50,7 +50,7 @@ class RegistrationsController < ApplicationController
 end
 ```
 
-You can mix and match traditional and poniard styles. Some actions can be
+Traditional and poniard styles can be used together. Some actions can be
 implemented in the normal controller, others can be provided by an injectable
 one.
 
@@ -74,8 +74,8 @@ end
 ### Sources
 
 Poniard knows about all the standard controller objects such as `response`,
-`session` and `flash`. You then layer your own domain specific definitions on
-top by creating **sources**:
+`session` and `flash`. Domain specific definitions are then layered on top by
+creating **sources**:
 
 ```ruby
 class Source
@@ -91,7 +91,7 @@ class Source
 end
 ```
 
-Wire this up in the `provided_by` call:
+This is wired up in the `provided_by` call:
 
 ```ruby
 provided_by Controller::Registration, sources: [
@@ -99,8 +99,8 @@ provided_by Controller::Registration, sources: [
 ]
 ```
 
-You can specify as many sources as you like, making it easy to reuse logic
-across controllers.
+Any number of sources can be used, making it easy to reuse logic across
+controllers.
 
 Testing
 -------
@@ -139,40 +139,23 @@ Techniques
 
 ### Built-in sources
 
-Undocumented, but it is a pretty straight-forward mapping to Rails objects with
-the exception of `response`. The code is in `lib/poniard/controller_source.rb`.
+See the [YARD docs][yard] for all the built in controller sources.
+
+[yard]: http://rubydoc.info/github/xaviershay/poniard/
 
 ### Layouts
 
-If you implement a `layout` method in your controller, it will be used to
-select a layout for the controller. This is equivalent to adding a custom
-`layout` method to a standard controller.
+If a `layout` method is implemented in a controller, it will be used to select
+a layout for the controller. This is equivalent to adding a custom `layout`
+method to a standard controller.
 
 ### Mime types
 
-The Rails `respond_with` API is not very OO, so is hard to test in isolation.
-Poniard provides a wrapper that allows you to provide a response object that is
-much easier to work with.
+The Rails `respond_to` API is not very Object-Oriented, so is hard to test in
+isolation. Poniard provides an alternative [`respond_with`][respond-with] that
+allows you to provide a response object, which is much easier to work with.
 
-```ruby
-module Controller
-  class Registration
-    def index(response, finder)
-      response.respond_with RegistrationsIndexResponse, finder.all
-    end
-
-    RegistrationsIndexResponse = Struct.new(:registrations) do
-      def html(response)
-        response.default registrations: registrations
-      end
-
-      def json(response)
-        response.render json: registrations.to_json
-      end
-    end
-  end
-end
-```
+[respond-with]: http://rubydoc.info/github/xaviershay/poniard/master/Poniard/ControllerSource/Response.html#respond_with-instance_method
 
 ### Authorization
 
@@ -182,19 +165,19 @@ can then be handled in a standard manner using `rescue_from`.
 ```ruby
 module Source
   class Admin
-    def current_organiser(session)
-      Organiser.find_by_id(session[:organiser_id])
+    def current_admin(session)
+      User.find_by_id(session[:admin_id])
     end
 
-    def authorized_organiser(current_organiser)
-      current_organiser || raise(ResponseException::Unauthorized)
+    def authorized_admin(current_admin)
+      current_admin || raise(ResponseException::Unauthorized)
     end
   end
 end
 ```
 
-This can be slightly weird if the method you are authorizing does not actually
-need to interact with the organiser, since it will have a method parameter that
+This can be slightly weird if the method being authorized does not actually
+need to interact with the admin, since it will have a method parameter that
 is never used.
 
 ```ruby
@@ -209,7 +192,7 @@ def instance_method(name)
 end
 
 it 'requires authorization' do
-  instance_method(:index).should have_param(:authorized_organiser)
+  instance_method(:index).should have_param(:authorized_admin)
 end
 ```
 
@@ -218,15 +201,11 @@ Developing
 
 ### Status
 
-Experimental. I've backported an existing app, added minor new features, and it
-was a pleasant experience. It needs a lot more usage before the API stabilizes,
-or it is even proved to be useful.
+Not widely used, but stable.
 
 ### Compatibility
 
-Requires 1.9, should be easy to backport to 1.8 if anyone is interested. Use
-1.9 style hashes and probably relies on `methods` calls returning symbols
-rather than strings.
+Requires 1.9 or above.
 
 ### Support
 

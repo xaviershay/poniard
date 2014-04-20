@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.9.0'
   gem.files         = Dir.glob("{spec,lib}/**/*.rb") + %w(
                         README.md
-                        HISTORY.md
+                        CHANGELOG.md
                         LICENSE
                         poniard.gemspec
                       )
@@ -24,5 +24,4 @@ Gem::Specification.new do |gem|
   gem.version       = Poniard::VERSION
   gem.has_rdoc      = false
   gem.add_development_dependency 'rspec', '~> 2.11'
-  gem.add_development_dependency 'rake'
 end
