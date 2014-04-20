@@ -1,5 +1,5 @@
 # Top-level namespace for Poniard. See +README.md+ for library description.
 module Poniard
   # Current version of Poniard, in semantic versioning format.
-  VERSION = '0.0.3'
+  VERSION = '1.0.0'
 end
