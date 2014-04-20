@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 require 'poniard/injector'
 
 describe Poniard::Injector do
@@ -66,6 +68,13 @@ describe Poniard::Injector do
     called.should == injector
   end
 
+  it 'allows nil values in hash sources' do
+    value = nil
+    injector = described_class.new
+    injector.dispatch ->(x) { value = x.nil? }, x: nil
+    value.should == true
+  end
+
   it 'yields a fail object when source is unknown' do
     called = false
     m = ->(unknown) {
@@ -79,5 +88,14 @@ describe Poniard::Injector do
     }
     described_class.new.dispatch(m)
     called.should be_true
+  end
+
+  describe '#eager_dispatch' do
+    it 'raises when source is unknown' do
+      m = ->(unknown) {}
+      expect {
+        described_class.new.eager_dispatch(m)
+      }.to raise_error(Poniard::UnknownParam, "unknown")
+    end
   end
 end
