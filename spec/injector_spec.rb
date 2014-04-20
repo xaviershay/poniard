@@ -68,6 +68,13 @@ describe Poniard::Injector do
     called.should == injector
   end
 
+  it 'allows nil values in hash sources' do
+    value = nil
+    injector = described_class.new
+    injector.dispatch ->(x) { value = x.nil? }, x: nil
+    value.should == true
+  end
+
   it 'yields a fail object when source is unknown' do
     called = false
     m = ->(unknown) {

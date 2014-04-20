@@ -71,7 +71,7 @@ module Poniard
     end
 
     def provides?(name)
-      !!@hash[name]
+      @hash.has_key?(name)
     end
 
     def dispatch(name, _)
