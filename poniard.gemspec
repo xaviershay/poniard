@@ -23,5 +23,4 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Poniard::VERSION
   gem.has_rdoc      = false
-  gem.add_development_dependency 'rspec', '~> 2.11'
 end
