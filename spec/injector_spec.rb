@@ -8,7 +8,7 @@ describe Poniard::Injector do
   it 'calls a lambda' do
     called = false
     described_class.new([]).dispatch -> { called = true }
-    called.should == true
+    expect(called).to eq(true)
   end
 
   it 'calls a method' do
@@ -18,7 +18,9 @@ describe Poniard::Injector do
       end
     end.new
 
-    described_class.new([]).dispatch(object.method(:a_number)).should == 12345
+    actual = described_class.new([]).dispatch(object.method(:a_number))
+
+    expect(actual).to eq(12345)
   end
 
   it 'calls a method with a parameter provided by a source' do
@@ -26,7 +28,7 @@ describe Poniard::Injector do
     described_class.new([
       thing: thing
     ]).dispatch ->(thing) { called = thing }
-    called.should == thing
+    expect(called).to eq(thing)
   end
 
   it 'recursively injects sources' do
@@ -41,7 +43,7 @@ describe Poniard::Injector do
       {thing: thing},
       two_source
     ]).dispatch ->(two_things) { called = two_things }
-    called.should == [thing, thing]
+    expect(called).to eq([thing, thing])
   end
 
   it 'uses the first source that provides a parameter' do
@@ -50,7 +52,7 @@ describe Poniard::Injector do
       {thing: thing},
       {thing: nil}
     ]).dispatch ->(thing) { called = thing }
-    called.should == thing
+    expect(called).to eq(thing)
   end
 
   it 'allows sources to be overriden at dispatch' do
@@ -58,36 +60,36 @@ describe Poniard::Injector do
     described_class.new([
       {thing: nil}
     ]).dispatch ->(thing) { called = thing }, thing: thing
-    called.should == thing
+    expect(called).to eq(thing)
   end
 
   it 'provides itself as a source' do
     called = false
     injector = described_class.new
     injector.dispatch ->(injector) { called = injector }
-    called.should == injector
+    expect(called).to eq(injector)
   end
 
   it 'allows nil values in hash sources' do
     value = nil
     injector = described_class.new
     injector.dispatch ->(x) { value = x.nil? }, x: nil
-    value.should == true
+    expect(value).to eq(true)
   end
 
   it 'yields a fail object when source is unknown' do
     called = false
     m = ->(unknown) {
-      ->{
+      expect{
         unknown.bogus
-      }.should raise_error(
+      }.to raise_error(
         Poniard::UnknownParam,
         "Tried to call method on an uninjected param: unknown"
       )
       called = true
     }
     described_class.new.dispatch(m)
-    called.should be_true
+    expect(called).to eq(true)
   end
 
   describe '#eager_dispatch' do
