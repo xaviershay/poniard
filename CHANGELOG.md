@@ -1,5 +1,9 @@
 # Poniard History
 
+## 1.0.1 - 4 May 2014
+
+* 30% speedup in method dispatch.
+
 ## 1.0.0 - 20 April 2014
 
 * `respond_with` returns 406 for unknown formats.
