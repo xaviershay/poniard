@@ -45,8 +45,10 @@ module Poniard
     private
 
     def dispatch_method(method, unknown_param_f, overrides = {})
+      sources = sources_for(overrides)
+
       args = method.parameters.map {|_, name|
-        source = sources_for(overrides).detect {|source|
+        source = sources.detect {|source|
           source.provides?(name)
         }
 
