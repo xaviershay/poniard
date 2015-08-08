@@ -33,6 +33,11 @@ module Poniard
       )
       controller
     end
+
+    def self.register!(app, provider = DefaultControllerProvider)
+      app.routes.dispatcher_class =
+        Poniard::DispatcherFactory.new(provider)
+    end
   end
 
   DispatcherFactory = Struct.new(:provider) do
