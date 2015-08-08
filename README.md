@@ -102,6 +102,45 @@ provided_by Controller::Registration, sources: [
 Any number of sources can be used, making it easy to reuse logic across
 controllers.
 
+### Implicit wiring
+
+_WARNING: This feature depends on a private Rails API. It may break at any
+time._
+
+Creating a wrapper controller for every poniard one is tiresome. Register
+a custom dispatcher in an initializer to have poniard create them for you. In
+an initializer:
+
+``` Ruby
+require 'poniard/dispatcher'
+
+Poniard::Dispatcher.register!(My::Application)
+```
+
+Sources matching by name will be available, so `Controller::Account` will have
+`Source::Account` available to it.
+
+Customize this behaviour and/or the naming scheme by providing a subclass of
+the default controller provider.
+
+``` Ruby
+require 'poniard/dispatcher'
+
+class MyPoniardProvider < Poniard::DefaultControllerProvider
+  def default_sources
+    [Sources::Application]
+  end
+
+  def controller_namespace; 'Controllers' end
+  def source_namespace;     'Sources' end
+end
+
+Poniard::Dispatcher.register!(My::Application, MyPoniardProvider)
+```
+
+Wrapper controllers will only be generated if one does not already exist, so
+you can continue to mix and match.
+
 Testing
 -------
 
